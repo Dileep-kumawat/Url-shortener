@@ -1,56 +1,16 @@
-import { useEffect, useState } from "react";
-import { useUrl } from "./hooks/useUrl"
+/**
+ * App.jsx — Root component with layout and background
+ */
+import BackgroundFx from "./components/BackgroundFx";
+import Header from "./components/Header";
+import Home from "./pages/Home";
 
-const App = () => {
-  const { urls, handleCreateUrl, handleGetUrls, handleDeleteUrl } = useUrl();
-  const [url, setUrl] = useState("");
+const App = () => (
+  <div className="relative min-h-screen bg-ink-950 font-body text-slate-100">
+    <BackgroundFx />
+    <Header />
+    <Home />
+  </div>
+);
 
-  async function createUrlShortener(e) {
-    e.preventDefault();
-
-    await handleCreateUrl({ url });
-    handleGetUrls();
-  }
-
-  async function deleteUrl(id) {
-    await handleDeleteUrl({ id });
-    handleGetUrls();
-  }
-
-  useEffect(() => {
-    handleGetUrls();
-  }, []);
-
-  return (
-    <div>
-      welcome from app :
-
-      <div>
-        <h1>All urls : </h1>
-
-        {urls.length <= 0 && <h2>No urls yet</h2>}
-
-        {urls.map((url) => {
-          return <div key={url._id}>
-            <a href={`${import.meta.env['VITE_BACKEND_ENDPOINT']}/${url.shorterUrl}`} target="_blank" rel="noopener noreferrer">{import.meta.env['VITE_BACKEND_ENDPOINT']}/{url.shorterUrl}</a> => {url.originalUrl}
-
-            <button onClick={() => { deleteUrl(url.shorterUrl) }} style={{ marginLeft: '20px' }}>Delete</button>
-            <br /><br />
-          </div>
-        })}
-      </div>
-
-      <br /><br /><br />
-
-      <div>
-        <h1>Create Url</h1>
-        <form onSubmit={createUrlShortener}>
-          <input value={url} onChange={(e) => setUrl(e.target.value)} type="text" placeholder="https://example.com/long/long..." />
-          <button>Create Url</button>
-        </form>
-      </div>
-    </div>
-  )
-}
-
-export default App
+export default App;
